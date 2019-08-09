@@ -8,12 +8,12 @@
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
     "clean": "del ./build",
     "lint": "eslint .",
-    "precommit": "lint-staged",
     "prepublish": "yarn run clean --silent && yarn run build --silent",
     "test-ci-partial": "yarn run test-coverage --silent",
     "test-ci": "yarn run lint --silent && yarn run test-ci-partial --silent && codecov",
     "test-coverage": "yarn run jest --silent -- --coverage",
-    "test": "jest"
+    "test": "jest",
+    "gitpkg": "yarn build && node ./bin/gitpkg.js publish"
   },
   "author": {
     "name": "Ramiro Silveyra d'Avila",
@@ -64,9 +64,6 @@
     "jest": "^20.0.4",
     "lint-staged": "^4.0.0",
     "prettier": "^1.4.4"
-  },
-  "gitpkg": {
-    "registry": "git@github.com:ramasilveyra/public-registry.git"
   },
   "jest": {
     "collectCoverageFrom": [

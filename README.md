@@ -1,3 +1,21 @@
+# Relive gitpkg
+
+gitpkg publishes npm packages as git tags. We use this to publish client files / types of server-projects that can be consumed in client apps.
+
+Example:
+
+- Create a regular lambda project (let's say, https://github.com/relivecc/my-lambda)
+- Put a client project in @client directory, with a package.json name of `my-lambda-client`
+- Set up Travis to run `yarn gitpkg` in client directory, when merging to master
+- Client projects can now use https://github.com/relivecc/my-lambda#client to consume the lambda
+- Of course, you still need to deploy the lambda in codepipeline
+
+## Changes to this repo
+
+This repo itself is also published as a gitpkg in https://github.com/relivecc/gitpkg#gitpkg. Use `yarn gitpkg` to publish changes.
+
+# original gitpkg readme
+
 <div align="center">
   <a href="https://travis-ci.org/ramasilveyra/gitpkg?branch=master">
     <img src="https://travis-ci.org/ramasilveyra/gitpkg.svg?branch=master" alt="Build Status">
@@ -93,7 +111,7 @@ $ gitpkg publish --registry git@mygit.server:org/private-registry.git
 
 This flag tells gitpkg to publish the package to a specific gitpkg registry.
 
-You can also set the gitpkg registry permanently by adding  `"gitpkg":{"registry":"git@mygit.server:org/private-registry.git"}` to the package.json.
+You can also set the gitpkg registry permanently by adding `"gitpkg":{"registry":"git@mygit.server:org/private-registry.git"}` to the package.json.
 
 <h2 align="center">Contribute</h2>
 

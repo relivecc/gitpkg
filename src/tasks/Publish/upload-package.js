@@ -14,9 +14,13 @@ export default async function uploadPackage(pkg, pkgPath, registry) {
   await execLikeShell(`git tag ${gitpkgPackageName}`, pkgTempDirPkg);
 
   // change Relive; first delete the tag
-  await execLikeShell(
-    `git push --delete origin ${gitpkgPackageName}`,
-    pkgTempDirPkg
-  );
+  try {
+    await execLikeShell(
+      `git push --delete origin ${gitpkgPackageName}`,
+      pkgTempDirPkg
+    );
+  } catch (e) {
+    console.warn(e);
+  }
   await execLikeShell(`git push origin ${gitpkgPackageName}`, pkgTempDirPkg);
 }

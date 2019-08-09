@@ -1,3 +1,5 @@
+# Relive branch at https://github.com/relivecc/gitpkg/tree/relive
+
 <div align="center">
   <a href="https://travis-ci.org/ramasilveyra/gitpkg?branch=master">
     <img src="https://travis-ci.org/ramasilveyra/gitpkg.svg?branch=master" alt="Build Status">
@@ -93,7 +95,7 @@ $ gitpkg publish --registry git@mygit.server:org/private-registry.git
 
 This flag tells gitpkg to publish the package to a specific gitpkg registry.
 
-You can also set the gitpkg registry permanently by adding  `"gitpkg":{"registry":"git@mygit.server:org/private-registry.git"}` to the package.json.
+You can also set the gitpkg registry permanently by adding `"gitpkg":{"registry":"git@mygit.server:org/private-registry.git"}` to the package.json.
 
 <h2 align="center">Contribute</h2>
 

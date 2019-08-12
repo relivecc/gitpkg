@@ -6,8 +6,8 @@ Example:
 
 - Create a regular lambda project (let's say, https://github.com/relivecc/my-lambda)
 - Put a client project in @client directory, with a package.json name of `my-lambda-client`
-- Set up Travis to run `yarn gitpkg` in client directory, when merging to master
-- Client projects can now use https://github.com/relivecc/my-lambda#client to consume the lambda
+- Set up Travis to run `yarn gitpkg` in client directory, when merging to master (see `skyhawk-lambda-activitystreams` sample)
+- Client projects can now use https://github.com/relivecc/packages#skyhawk-lambda-activitystreams-client to consume the lambda
 - Of course, you still need to deploy the lambda in codepipeline
 
 ## Changes to this repo

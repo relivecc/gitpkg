@@ -4,6 +4,7 @@
   "description": "Publish packages as git tags",
   "main": "build/index.js",
   "scripts": {
+    "postinstall": "yarn build",
     "build": "babel src -d build -s",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
     "clean": "del ./build",

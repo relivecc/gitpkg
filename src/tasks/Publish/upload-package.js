@@ -13,6 +13,13 @@ export default async function uploadPackage(pkg, pkgPath, registry) {
   await execLikeShell(`git remote add origin ${registry}`, pkgTempDirPkg);
   await execLikeShell(`git tag ${gitpkgPackageName}`, pkgTempDirPkg);
 
+  console.log(gitpkgPackageName, pkgTempDirPkg);
+  const x = await execLikeShell(
+    `git diff --quiet master; echo $?`,
+    pkgTempDirPkg
+  );
+  console.log(x);
+
   // change Relive; first delete the tag
   try {
     await execLikeShell(

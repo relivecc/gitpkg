@@ -11,16 +11,24 @@ export default async function uploadPackage(pkg, pkgPath, registry) {
   await execLikeShell("git add .", pkgTempDirPkg);
   await execLikeShell("git commit -m gitpkg", pkgTempDirPkg);
   await execLikeShell(`git remote add origin ${registry}`, pkgTempDirPkg);
-  await execLikeShell(`git tag ${gitpkgPackageName}`, pkgTempDirPkg);
 
-  console.log(gitpkgPackageName, pkgTempDirPkg);
-  const x = await execLikeShell(
-    `git diff --quiet master; echo $?`,
+  // <Relive>
+  await execLikeShell(`git fetch --tags`, pkgTempDirPkg);
+  let changed = await execLikeShell(
+    `git diff --quiet ${gitpkgPackageName};echo $?`,
     pkgTempDirPkg
   );
-  console.log(x);
 
-  // change Relive; first delete the tag
+  console.log(changed);
+  changed = false;
+
+  if (!changed) {
+    console.log("No changes detected");
+    return;
+  }
+
+  await execLikeShell(`git tag ${gitpkgPackageName}`, pkgTempDirPkg);
+
   try {
     await execLikeShell(
       `git push --delete origin ${gitpkgPackageName}`,
@@ -30,4 +38,5 @@ export default async function uploadPackage(pkg, pkgPath, registry) {
     console.warn(e);
   }
   await execLikeShell(`git push origin ${gitpkgPackageName}`, pkgTempDirPkg);
+  // </Relive>
 }

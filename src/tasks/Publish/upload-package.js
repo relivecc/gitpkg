@@ -24,7 +24,7 @@ export default async function uploadPackage(pkg, pkgPath, registry) {
     let changed = await new Promise(async (resolve, reject) => {
       try {
         // Exits with code 1 when changes are available
-        await execLikeShell(
+        const changes = await execLikeShell(
           `git diff ${gitpkgPackageName} --quiet`,
           pkgTempDirPkg
         );

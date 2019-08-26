@@ -21,7 +21,7 @@ export default async function uploadPackage(pkg, pkgPath, registry) {
   );
 
   if (stdout) {
-    let changed = await new Promise(async (resolve, reject) => {
+    const changed = await new Promise(async (resolve, reject) => {
       try {
         // Exits with code 1 when changes are available
         const changes = await execLikeShell(

@@ -5,7 +5,7 @@
   "main": "build/index.js",
   "scripts": {
     "postinstall": "yarn build",
-    "build": "babel src -d build -s",
+    "build": "./node_modules/babel-cli/bin/babel.js src -d build -s",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
     "clean": "del ./build",
     "lint": "eslint .",

@@ -37,7 +37,7 @@ export default async function uploadPackage(pkg, pkgPath, registry) {
           resolve(true);
           return;
         }
-        throw new Error(e);
+        reject(err);
       }
     });
 

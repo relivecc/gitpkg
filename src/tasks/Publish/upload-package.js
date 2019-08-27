@@ -13,9 +13,11 @@ export default async function uploadPackage(pkg, pkgPath, registry) {
   await execLikeShell(`git remote add origin ${registry}`, pkgTempDirPkg);
 
   // <Relive>
+  // 1. Fetch all tags from remote
   await execLikeShell(`git fetch --all`, pkgTempDirPkg);
   await execLikeShell(`git fetch --tags`, pkgTempDirPkg);
 
+  // 2. Check if the tag already exists
   const { stdout } = await execLikeShell(
     `git ls-remote --tags origin | grep refs/tags/${gitpkgPackageName}`
   );
@@ -23,6 +25,7 @@ export default async function uploadPackage(pkg, pkgPath, registry) {
   if (stdout) {
     const changed = await new Promise(async (resolve, reject) => {
       try {
+        // 3. Diff the tag from remote with current added changes
         // Exits with code 1 when changes are available
         const changes = await execLikeShell(
           `git diff ${gitpkgPackageName} --quiet`,
@@ -47,6 +50,8 @@ export default async function uploadPackage(pkg, pkgPath, registry) {
     }
 
     try {
+      // 4. Because we fetched all tags from the remote we need to delete the remote
+      // and local tag otherwise we cannot publish to the same tag
       await execLikeShell(
         `git push --delete origin ${gitpkgPackageName}`,
         pkgTempDirPkg
@@ -57,6 +62,7 @@ export default async function uploadPackage(pkg, pkgPath, registry) {
     }
   }
 
+  // 5. Tag & Push
   await execLikeShell(`git tag ${gitpkgPackageName}`, pkgTempDirPkg);
   await execLikeShell(`git push origin ${gitpkgPackageName}`, pkgTempDirPkg);
   // </Relive>

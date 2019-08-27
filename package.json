@@ -13,7 +13,7 @@
     "test-ci": "yarn run lint --silent && yarn run test-ci-partial --silent && codecov",
     "test-coverage": "yarn run jest --silent -- --coverage",
     "test": "jest",
-    "gitpkg": "yarn build && node ./bin/gitpkg.js publish"
+    "gitpkg": "yarn build && node ./bin/gitpkg.js publish --registry git@github.com:relivecc/packages.git"
   },
   "author": {
     "name": "Ramiro Silveyra d'Avila",

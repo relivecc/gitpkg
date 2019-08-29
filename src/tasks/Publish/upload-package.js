@@ -19,7 +19,8 @@ export default async function uploadPackage(pkg, pkgPath, registry) {
 
   // 2. Check if the tag already exists
   const { stdout } = await execLikeShell(
-    `git ls-remote --tags origin | grep refs/tags/${gitpkgPackageName}`
+    `git ls-remote --tags origin | grep refs/tags/${gitpkgPackageName}`,
+    pkgTempDirPkg
   );
 
   if (stdout) {

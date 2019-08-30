@@ -51,7 +51,7 @@ export default async function uploadPackage(pkg, pkgPath, registry) {
       try {
         // 3. Diff the current version with the changes
         // Exits with code 1 when changes are available
-        const changes = await (0, _execLikeShell2.default)(
+        const changes = await execLikeShell(
           `git diff ${gitpkgPackageName}-v${currentVersion} --quiet`,
           pkgTempDirPkg
         );

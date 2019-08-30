@@ -17,19 +17,42 @@ export default async function uploadPackage(pkg, pkgPath, registry) {
   await execLikeShell(`git fetch --all`, pkgTempDirPkg);
   await execLikeShell(`git fetch --tags`, pkgTempDirPkg);
 
-  // 2. Check if the tag already exists
+  // 2. Get all tags from the registry
   const { stdout } = await execLikeShell(
-    `git ls-remote --tags origin | grep refs/tags/${gitpkgPackageName}`,
+    `git ls-remote --tags origin`,
     pkgTempDirPkg
   );
 
-  if (stdout) {
-    const changed = await new Promise(async (resolve, reject) => {
+  let revisions = stdout
+    .split("\n")
+    .map(row => {
+      return row.split("\t")[1];
+    })
+    .filter(tag => tag.includes(`${gitpkgPackageName}-v`))
+    .map(tag => {
+      const version = tag.match(/v(\d+\.)?(\d+\.)?(\*|\d+)$/g)[0];
+      if (version) {
+        return version.replace("v", "");
+      }
+    })
+    .filter(x => x)
+    .sort((a, b) => semver.gte(a, b));
+
+  const currentVersion = revisions.length
+    ? revisions[revisions.length - 1]
+    : undefined;
+
+  const newVersion = currentVersion
+    ? semver.inc(currentVersion, "patch")
+    : "0.0.1";
+
+  if (currentVersion) {
+    let changed = await new Promise(async resolve => {
       try {
-        // 3. Diff the tag from remote with current added changes
+        // 3. Diff the current version with the changes
         // Exits with code 1 when changes are available
-        const changes = await execLikeShell(
-          `git diff ${gitpkgPackageName} --quiet`,
+        const changes = await (0, _execLikeShell2.default)(
+          `git diff ${gitpkgPackageName}-v${currentVersion} --quiet`,
           pkgTempDirPkg
         );
 
@@ -41,7 +64,7 @@ export default async function uploadPackage(pkg, pkgPath, registry) {
           resolve(true);
           return;
         }
-        reject(err);
+        throw new Error(e);
       }
     });
 
@@ -49,22 +72,16 @@ export default async function uploadPackage(pkg, pkgPath, registry) {
       console.log("No changes detected");
       return;
     }
-
-    try {
-      // 4. Because we fetched all tags from the remote we need to delete the remote
-      // and local tag otherwise we cannot publish to the same tag
-      await execLikeShell(
-        `git push --delete origin ${gitpkgPackageName}`,
-        pkgTempDirPkg
-      );
-      await execLikeShell(`git tag -d ${gitpkgPackageName}`, pkgTempDirPkg);
-    } catch (e) {
-      console.warn(e);
-    }
   }
 
-  // 5. Tag & Push
-  await execLikeShell(`git tag ${gitpkgPackageName}`, pkgTempDirPkg);
-  await execLikeShell(`git push origin ${gitpkgPackageName}`, pkgTempDirPkg);
+  // 4. Tag new version & Push
+  await execLikeShell(
+    `git tag ${gitpkgPackageName}-v${newVersion}`,
+    pkgTempDirPkg
+  );
+  await execLikeShell(
+    `git push origin ${gitpkgPackageName}-v${newVersion}`,
+    pkgTempDirPkg
+  );
   // </Relive>
 }

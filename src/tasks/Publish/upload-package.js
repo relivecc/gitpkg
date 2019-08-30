@@ -47,7 +47,7 @@ export default async function uploadPackage(pkg, pkgPath, registry) {
     : "0.0.1";
 
   if (currentVersion) {
-    let changed = await new Promise(async resolve => {
+    let changed = await new Promise(async (resolve, reject) => {
       try {
         // 3. Diff the current version with the changes
         // Exits with code 1 when changes are available
@@ -64,7 +64,7 @@ export default async function uploadPackage(pkg, pkgPath, registry) {
           resolve(true);
           return;
         }
-        throw new Error(e);
+        reject(e);
       }
     });
 

@@ -1,4 +1,5 @@
-import path, { resolve } from "path";
+import * as semver from "semver";
+import path from "path";
 import execLikeShell from "./exec-like-shell";
 import getTempDir from "./get-temp-dir";
 import getGitTagName from "./get-git-tag-name";

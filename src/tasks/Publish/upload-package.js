@@ -37,7 +37,7 @@ export default async function uploadPackage(pkg, pkgPath, registry) {
       }
     })
     .filter(x => x)
-    .sort((a, b) => semver.gte(a, b));
+    .sort((a, b) => (semver.gte(a, b) ? 1 : -1));
 
   const currentVersion = revisions.length
     ? revisions[revisions.length - 1]
